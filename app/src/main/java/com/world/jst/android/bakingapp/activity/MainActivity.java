@@ -53,18 +53,20 @@ public class MainActivity extends AppCompatActivity {
             if (response.isSuccessful()) {
                 List<Recipe> recipes = response.body();
 
-                for (Recipe recipe: recipes) {
-                    Log.d(TAG, recipe.toString() + "\n");
+                if (recipes != null) {
+                    for (Recipe recipe: recipes) {
+                        Log.d(TAG, recipe.toString() + "\n");
+                    }
                 }
             } else {
-                if (L) Log.d(TAG, "Code: " + response.code() + " Message: " + response.message());
+                if (L) Log.d(TAG, call.request().url() + " failed: HTTP " + response.code());
             }
         }
 
         @Override
         public void onFailure(Call<List<Recipe>> call, Throwable t) {
             t.printStackTrace();
-            if (L) Log.e(TAG, "Error: " + t.toString());
+            if (L) Log.e(TAG, call.request().url() + " failed: " + t.toString());
         }
     };
 
