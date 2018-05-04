@@ -1,12 +1,12 @@
 package com.world.jst.android.bakingapp.activity;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
-import android.widget.Toast;
 
 import com.world.jst.android.bakingapp.fragment.RecipesListFragment;
 import com.world.jst.android.bakingapp.model.Recipe;
 
-public class RecipesActivity extends SingleFragmentActivity
+public class RecipesListActivity extends SingleFragmentActivity
         implements RecipesListFragment.RecipeOnClickHandler {
 
     @Override
@@ -16,7 +16,9 @@ public class RecipesActivity extends SingleFragmentActivity
 
     @Override
     public void onClick(Recipe recipe) {
-        Toast.makeText(this, recipe.toString(), Toast.LENGTH_SHORT).show();
+        Intent intentRecipeDetails = new Intent(this, RecipeActivity.class);
+        intentRecipeDetails.putExtra(RecipeActivity.RECIPE_ITEM, recipe.mName);
+        startActivity(intentRecipeDetails);
     }
 }
 
