@@ -8,9 +8,11 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -48,6 +50,8 @@ public class RecipesListFragment extends Fragment {
     // Turn logging on or off
     private static final boolean L = true;
     private static final String TAG = "RecipesListFragment";
+    private static final int COLUMN_WIDTH = 300;
+    private int mFirstVisibleItemPosition = 0;
     private Call<List<Recipe>> mRecipeCall;
     private RecipeRecyclerViewAdapter mAdapter;
     private RecipeOnClickHandler mCallbacks;
@@ -74,6 +78,40 @@ public class RecipesListFragment extends Fragment {
         mRecipeRecyclerView.setLayoutManager(layoutManager);
         mAdapter = new RecipeRecyclerViewAdapter(getActivity(), mCallbacks);
         mRecipeRecyclerView.setAdapter(mAdapter);
+
+        mRecipeRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                GridLayoutManager gridLayoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
+                mFirstVisibleItemPosition = gridLayoutManager.findLastCompletelyVisibleItemPosition();
+            }
+        });
+
+        mRecipeRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        float columnWidthInPixels = TypedValue.applyDimension(
+                                TypedValue.COMPLEX_UNIT_DIP,
+                                COLUMN_WIDTH,
+                                getActivity().getResources().getDisplayMetrics());
+                        int width = mRecipeRecyclerView.getWidth();
+                        int columnNumber = Math.round(width / columnWidthInPixels);
+                        mRecipeRecyclerView.setLayoutManager(
+                                new GridLayoutManager(getActivity(), columnNumber));
+                        mRecipeRecyclerView.scrollToPosition(mFirstVisibleItemPosition);
+                        mRecipeRecyclerView
+                                .getViewTreeObserver()
+                                .removeOnGlobalLayoutListener(this);
+                    }
+                });
+
 
         boolean online = NetworkHelper.hasNetworkAccess(getActivity());
         if (online) {
