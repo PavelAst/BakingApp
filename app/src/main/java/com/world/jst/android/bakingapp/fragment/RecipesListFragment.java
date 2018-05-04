@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +38,9 @@ public class RecipesListFragment extends Fragment
     TextView mEmptyRecipesListTextView;
     @BindView(R.id.recipes_rv)
     RecyclerView mRecipeRecyclerView;
-    private Unbinder unbinder;
+    @BindView(R.id.loading_indicator_pb)
+    ProgressBar mLoadingIndicator;
+    private Unbinder mUnbinder;
 
     // Turn logging on or off
     private static final boolean L = true;
@@ -54,7 +57,7 @@ public class RecipesListFragment extends Fragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recipes_list, container, false);
-        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
 
         int numberOfColumns = 1;
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), numberOfColumns);
@@ -66,7 +69,7 @@ public class RecipesListFragment extends Fragment
         if (online) {
             loadRecipes();
         } else {
-            Log.d(TAG, "Internet Not available");
+            showErrorMessage(R.string.error_message_network);
         }
 
         return view;
@@ -78,7 +81,20 @@ public class RecipesListFragment extends Fragment
             mRecipeCall.cancel();
         }
         super.onDestroyView();
-        unbinder.unbind();
+        mUnbinder.unbind();
+    }
+
+    private void showRecipes() {
+        mEmptyRecipesListTextView.setVisibility(View.INVISIBLE);
+        mRecipeRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+    private void showErrorMessage(int resid) {
+        /* First, hide the currently visible data */
+        mRecipeRecyclerView.setVisibility(View.INVISIBLE);
+        /* Then, show the error */
+        mEmptyRecipesListTextView.setVisibility(View.VISIBLE);
+        mEmptyRecipesListTextView.setText(resid);
     }
 
     private void loadRecipes() {
@@ -88,7 +104,7 @@ public class RecipesListFragment extends Fragment
                 .build();
 
         mRecipeCall = retrofit.create(RecipesAPI.class).getRecipes();
-
+        mLoadingIndicator.setVisibility(View.VISIBLE);
         mRecipeCall.enqueue(recipesCallback);
     }
 
@@ -99,26 +115,29 @@ public class RecipesListFragment extends Fragment
                 List<Recipe> recipes = response.body();
 
                 if (recipes != null) {
-                    for (Recipe recipe : recipes) {
-                        Log.d(TAG, recipe.toString() + "\n");
-                    }
-
-                    mEmptyRecipesListTextView.setVisibility(View.INVISIBLE);
-                    mRecipeRecyclerView.setVisibility(View.VISIBLE);
-
                     mAdapter.setRecipes(recipes);
+                    callCompleted();
+                    showRecipes();
                 }
             } else {
+                callCompleted();
+                showErrorMessage(R.string.error_message_all);
                 if (L) Log.d(TAG, call.request().url() + " failed: HTTP " + response.code());
             }
         }
 
         @Override
         public void onFailure(Call<List<Recipe>> call, Throwable t) {
-            t.printStackTrace();
+            showErrorMessage(R.string.error_message_all);
             if (L) Log.e(TAG, call.request().url() + " failed: " + t.toString());
+            callCompleted();
         }
     };
+
+    private void callCompleted() {
+        mLoadingIndicator.setVisibility(View.INVISIBLE);
+        mRecipeCall = null;
+    }
 
     @Override
     public void onClick(Recipe recipe) {

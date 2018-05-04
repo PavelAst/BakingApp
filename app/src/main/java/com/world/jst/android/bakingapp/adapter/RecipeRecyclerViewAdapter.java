@@ -13,7 +13,6 @@ import com.squareup.picasso.Picasso;
 import com.world.jst.android.bakingapp.R;
 import com.world.jst.android.bakingapp.model.Recipe;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -45,7 +44,7 @@ public class RecipeRecyclerViewAdapter extends
 
     @Override
     public void onBindViewHolder(@NonNull RecipeViewHolder recipeViewHolder, int position) {
-        Recipe recipe = mRecipes.get(position);
+        final Recipe recipe = mRecipes.get(position);
         recipeViewHolder.bindTo(recipe);
     }
 
@@ -70,6 +69,7 @@ public class RecipeRecyclerViewAdapter extends
         public RecipeViewHolder(View recipeView) {
             super(recipeView);
             ButterKnife.bind(this, recipeView);
+            recipeView.setOnClickListener(this);
         }
 
         public void bindTo(Recipe recipe) {
