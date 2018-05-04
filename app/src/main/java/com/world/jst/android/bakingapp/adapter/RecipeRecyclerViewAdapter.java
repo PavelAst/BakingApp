@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.world.jst.android.bakingapp.R;
+import com.world.jst.android.bakingapp.fragment.RecipesListFragment;
 import com.world.jst.android.bakingapp.model.Recipe;
 
 import java.util.List;
@@ -21,15 +22,11 @@ import butterknife.ButterKnife;
 public class RecipeRecyclerViewAdapter extends
         RecyclerView.Adapter<RecipeRecyclerViewAdapter.RecipeViewHolder> {
 
-    public interface RecipeAdapterOnClickHandler {
-        void onClick(Recipe recipe);
-    }
-
     private final Context mContext;
     private List<Recipe> mRecipes;
-    private final RecipeAdapterOnClickHandler mClickHandler;
+    private final RecipesListFragment.RecipeOnClickHandler mClickHandler;
 
-    public RecipeRecyclerViewAdapter(Context context, RecipeAdapterOnClickHandler clickHandler) {
+    public RecipeRecyclerViewAdapter(Context context, RecipesListFragment.RecipeOnClickHandler clickHandler) {
         mContext = context;
         mClickHandler = clickHandler;
     }

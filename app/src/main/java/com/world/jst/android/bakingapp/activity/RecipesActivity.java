@@ -1,28 +1,22 @@
 package com.world.jst.android.bakingapp.activity;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.widget.Toast;
 
-import com.world.jst.android.bakingapp.R;
 import com.world.jst.android.bakingapp.fragment.RecipesListFragment;
 import com.world.jst.android.bakingapp.model.Recipe;
-import com.world.jst.android.bakingapp.network.RecipesAPI;
 
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-public class RecipesActivity extends SingleFragmentActivity {
+public class RecipesActivity extends SingleFragmentActivity
+        implements RecipesListFragment.RecipeOnClickHandler {
 
     @Override
     protected Fragment createFragment() {
         return new RecipesListFragment();
     }
 
+    @Override
+    public void onClick(Recipe recipe) {
+        Toast.makeText(this, recipe.toString(), Toast.LENGTH_SHORT).show();
+    }
 }
 

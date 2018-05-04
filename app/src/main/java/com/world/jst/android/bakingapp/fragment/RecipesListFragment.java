@@ -1,5 +1,6 @@
 package com.world.jst.android.bakingapp.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.world.jst.android.bakingapp.R;
 import com.world.jst.android.bakingapp.adapter.RecipeRecyclerViewAdapter;
@@ -31,8 +31,11 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RecipesListFragment extends Fragment
-        implements RecipeRecyclerViewAdapter.RecipeAdapterOnClickHandler {
+public class RecipesListFragment extends Fragment {
+
+    public interface RecipeOnClickHandler {
+        void onClick(Recipe recipe);
+    }
 
     @BindView(R.id.empty_recipes_list_tv)
     TextView mEmptyRecipesListTextView;
@@ -47,10 +50,17 @@ public class RecipesListFragment extends Fragment
     private static final String TAG = "RecipesListFragment";
     private Call<List<Recipe>> mRecipeCall;
     private RecipeRecyclerViewAdapter mAdapter;
+    private RecipeOnClickHandler mCallbacks;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallbacks = (RecipeOnClickHandler) context;
     }
 
     @Nullable
@@ -62,7 +72,7 @@ public class RecipesListFragment extends Fragment
         int numberOfColumns = 1;
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), numberOfColumns);
         mRecipeRecyclerView.setLayoutManager(layoutManager);
-        mAdapter = new RecipeRecyclerViewAdapter(getActivity(), this);
+        mAdapter = new RecipeRecyclerViewAdapter(getActivity(), mCallbacks);
         mRecipeRecyclerView.setAdapter(mAdapter);
 
         boolean online = NetworkHelper.hasNetworkAccess(getActivity());
@@ -82,6 +92,12 @@ public class RecipesListFragment extends Fragment
         }
         super.onDestroyView();
         mUnbinder.unbind();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
     }
 
     private void showRecipes() {
@@ -137,11 +153,6 @@ public class RecipesListFragment extends Fragment
     private void callCompleted() {
         mLoadingIndicator.setVisibility(View.INVISIBLE);
         mRecipeCall = null;
-    }
-
-    @Override
-    public void onClick(Recipe recipe) {
-        Toast.makeText(getActivity(), recipe.toString(), Toast.LENGTH_SHORT).show();
     }
 }
 
