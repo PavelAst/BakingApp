@@ -27,6 +27,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.realm.Realm;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -55,29 +57,41 @@ public class RecipesListFragment extends Fragment {
     private Call<List<Recipe>> mRecipeCall;
     private RecipeRecyclerViewAdapter mAdapter;
     private RecipeOnClickHandler mCallbacks;
+    private Realm mRealm;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (L) Log.d(TAG, "*** RecipesListFragment - onCreate ***");
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mCallbacks = (RecipeOnClickHandler) context;
+        if (L) Log.d(TAG, "*** RecipesListFragment - onAttach ***");
     }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        if (L) Log.d(TAG, "*** RecipesListFragment - onCreateView ***");
         View view = inflater.inflate(R.layout.fragment_recipes_list, container, false);
         mUnbinder = ButterKnife.bind(this, view);
+
+        mRealm = Realm.getDefaultInstance();
+        RealmResults<Recipe> recipes = mRealm.where(Recipe.class).sort("mId").findAll();
+        if (L) Log.d(TAG, "*** Total recipes: " + recipes.size());
 
         int numberOfColumns = 1;
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), numberOfColumns);
         mRecipeRecyclerView.setLayoutManager(layoutManager);
-        mAdapter = new RecipeRecyclerViewAdapter(getActivity(), mCallbacks);
+        mAdapter = new RecipeRecyclerViewAdapter(getActivity(), recipes, mCallbacks);
         mRecipeRecyclerView.setAdapter(mAdapter);
+        if (mAdapter.getItemCount() > 0) {
+            showRecipes();
+        }
 
         mRecipeRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -116,8 +130,8 @@ public class RecipesListFragment extends Fragment {
         boolean online = NetworkHelper.hasNetworkAccess(getActivity());
         if (online) {
             loadRecipes();
-        } else {
-            showErrorMessage(R.string.error_message_network);
+        } else if (mAdapter.getItemCount() == 0) {
+            showMessage(R.string.error_message_network);
         }
 
         return view;
@@ -125,15 +139,18 @@ public class RecipesListFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
+        if (L) Log.d(TAG, "*** RecipesListFragment - onDestroyView ***");
         if (mRecipeCall != null) {
             mRecipeCall.cancel();
         }
+        mRealm.close();
         super.onDestroyView();
         mUnbinder.unbind();
     }
 
     @Override
     public void onDetach() {
+        if (L) Log.d(TAG, "*** RecipesListFragment - onDetach ***");
         super.onDetach();
         mCallbacks = null;
     }
@@ -143,10 +160,7 @@ public class RecipesListFragment extends Fragment {
         mRecipeRecyclerView.setVisibility(View.VISIBLE);
     }
 
-    private void showErrorMessage(int resid) {
-        /* First, hide the currently visible data */
-        mRecipeRecyclerView.setVisibility(View.INVISIBLE);
-        /* Then, show the error */
+    private void showMessage(int resid) {
         mEmptyRecipesListTextView.setVisibility(View.VISIBLE);
         mEmptyRecipesListTextView.setText(resid);
     }
@@ -169,20 +183,24 @@ public class RecipesListFragment extends Fragment {
                 List<Recipe> recipes = response.body();
 
                 if (recipes != null) {
-                    mAdapter.setRecipes(recipes);
+                    saveToRealm(recipes);
                     callCompleted();
                     showRecipes();
                 }
             } else {
                 callCompleted();
-                showErrorMessage(R.string.error_message_all);
+                if (mAdapter.getItemCount() == 0) {
+                    showMessage(R.string.error_message_all);
+                }
                 if (L) Log.d(TAG, call.request().url() + " failed: HTTP " + response.code());
             }
         }
 
         @Override
         public void onFailure(Call<List<Recipe>> call, Throwable t) {
-            showErrorMessage(R.string.error_message_all);
+            if (mAdapter.getItemCount() == 0) {
+                showMessage(R.string.error_message_all);
+            }
             if (L) Log.e(TAG, call.request().url() + " failed: " + t.toString());
             callCompleted();
         }
@@ -191,6 +209,22 @@ public class RecipesListFragment extends Fragment {
     private void callCompleted() {
         mLoadingIndicator.setVisibility(View.INVISIBLE);
         mRecipeCall = null;
+    }
+
+    private void saveToRealm(final List<Recipe> retrievedRecipes) {
+        mRealm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.insertOrUpdate(retrievedRecipes);
+
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                // Transaction was a success.
+
+            }
+        });
     }
 }
 

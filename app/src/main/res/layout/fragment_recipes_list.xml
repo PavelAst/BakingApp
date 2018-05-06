@@ -7,9 +7,7 @@
         android:id="@+id/recipes_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible">
-
-    </android.support.v7.widget.RecyclerView>
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/empty_recipes_list_tv"
@@ -17,8 +15,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_marginTop="60dp"
-        android:text="@string/loading_data"
+        android:text="@string/no_data"
         android:textSize="24sp"
         android:visibility="visible" />
 

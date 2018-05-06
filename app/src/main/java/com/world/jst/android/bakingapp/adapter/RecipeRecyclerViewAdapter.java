@@ -2,6 +2,7 @@ package com.world.jst.android.bakingapp.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,19 +15,21 @@ import com.world.jst.android.bakingapp.R;
 import com.world.jst.android.bakingapp.fragment.RecipesListFragment;
 import com.world.jst.android.bakingapp.model.Recipe;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.OrderedRealmCollection;
+import io.realm.RealmRecyclerViewAdapter;
 
 public class RecipeRecyclerViewAdapter extends
-        RecyclerView.Adapter<RecipeRecyclerViewAdapter.RecipeViewHolder> {
+        RealmRecyclerViewAdapter<Recipe, RecipeRecyclerViewAdapter.RecipeViewHolder> {
 
     private final Context mContext;
-    private List<Recipe> mRecipes;
     private final RecipesListFragment.RecipeOnClickHandler mClickHandler;
 
-    public RecipeRecyclerViewAdapter(Context context, RecipesListFragment.RecipeOnClickHandler clickHandler) {
+    public RecipeRecyclerViewAdapter(Context context,
+                                     @Nullable OrderedRealmCollection<Recipe> data,
+                                     RecipesListFragment.RecipeOnClickHandler clickHandler) {
+        super(data, true);
         mContext = context;
         mClickHandler = clickHandler;
     }
@@ -34,25 +37,15 @@ public class RecipeRecyclerViewAdapter extends
     @NonNull
     @Override
     public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(mContext);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.recipe_item, parent, false);
         return new RecipeViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecipeViewHolder recipeViewHolder, int position) {
-        final Recipe recipe = mRecipes.get(position);
+        Recipe recipe = getData().get(position);
         recipeViewHolder.bindTo(recipe);
-    }
-
-    @Override
-    public int getItemCount() {
-        return (mRecipes == null) ? 0 : mRecipes.size();
-    }
-
-    public void setRecipes(List<Recipe> recipes) {
-        mRecipes = recipes;
-        notifyDataSetChanged();
     }
 
     public class RecipeViewHolder extends RecyclerView.ViewHolder
@@ -83,7 +76,7 @@ public class RecipeRecyclerViewAdapter extends
         @Override
         public void onClick(View view) {
             int adapterPosition = getAdapterPosition();
-            Recipe recipe = mRecipes.get(adapterPosition);
+            Recipe recipe = getData().get(adapterPosition);
             if (mClickHandler != null) {
                 mClickHandler.onClick(recipe);
             }

@@ -2,21 +2,26 @@ package com.world.jst.android.bakingapp.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
 
-public class Recipe {
+public class Recipe extends RealmObject {
 
+    @PrimaryKey
     @SerializedName("id")
     public int mId;
 
+    @Required
     @SerializedName("name")
     public String mName;
 
     @SerializedName("ingredients")
-    public List<Ingredient> mIngredients;
+    public RealmList<Ingredient> mIngredients;
 
     @SerializedName("steps")
-    public List<Step> mSteps;
+    public RealmList<Step> mSteps;
 
     @SerializedName("servings")
     public String mServings;

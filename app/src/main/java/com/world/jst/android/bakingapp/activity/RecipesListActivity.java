@@ -17,7 +17,7 @@ public class RecipesListActivity extends SingleFragmentActivity
     @Override
     public void onClick(Recipe recipe) {
         Intent intentRecipeDetails = new Intent(this, RecipeActivity.class);
-        intentRecipeDetails.putExtra(RecipeActivity.RECIPE_ITEM, recipe.mName);
+        intentRecipeDetails.putExtra(RecipeActivity.RECIPE_ITEM_ID, recipe.mId);
         startActivity(intentRecipeDetails);
     }
 }

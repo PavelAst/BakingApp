@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Baking App</string>
 
+    <string name="no_data">No data available</string>
     <string name="loading_data">Loading data…</string>
     <string name="error_message_network">
         Network isn\'t available. Please try later.

@@ -2,7 +2,9 @@ package com.world.jst.android.bakingapp.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Ingredient {
+import io.realm.RealmObject;
+
+public class Ingredient extends RealmObject {
 
     @SerializedName("quantity")
     public float mQuantity;

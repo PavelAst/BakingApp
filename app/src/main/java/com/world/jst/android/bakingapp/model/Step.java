@@ -2,8 +2,12 @@ package com.world.jst.android.bakingapp.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Step {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class Step extends RealmObject {
+
+    @PrimaryKey
     @SerializedName("id")
     public int mId;
 
