@@ -9,11 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.world.jst.android.bakingapp.R;
 import com.world.jst.android.bakingapp.adapter.IngredientRecyclerViewAdapter;
-import com.world.jst.android.bakingapp.model.Ingredient;
 import com.world.jst.android.bakingapp.model.Recipe;
 
 import butterknife.BindView;

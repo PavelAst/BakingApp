@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.world.jst.android.bakingapp.R;
+import com.world.jst.android.bakingapp.fragment.RecipeStepsFragment;
 import com.world.jst.android.bakingapp.model.Step;
 
 import butterknife.BindView;
@@ -19,8 +20,12 @@ import io.realm.RealmRecyclerViewAdapter;
 public class StepRecyclerViewAdapter extends
         RealmRecyclerViewAdapter<Step, StepRecyclerViewAdapter.StepViewHolder> {
 
-    public StepRecyclerViewAdapter(@Nullable OrderedRealmCollection<Step> data) {
+    private final RecipeStepsFragment.RecipeStepsOnClickHandler mClickHandler;
+
+    public StepRecyclerViewAdapter(@Nullable OrderedRealmCollection<Step> data,
+                                   RecipeStepsFragment.RecipeStepsOnClickHandler clickHandler) {
         super(data, true);
+        mClickHandler = clickHandler;
     }
 
     @NonNull
@@ -37,7 +42,7 @@ public class StepRecyclerViewAdapter extends
         holder.bindTo(step);
     }
 
-    public class StepViewHolder extends RecyclerView.ViewHolder {
+    public class StepViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.step_number_tv)
         TextView mStepNumberTV;
@@ -47,11 +52,21 @@ public class StepRecyclerViewAdapter extends
         public StepViewHolder(View stepView) {
             super(stepView);
             ButterKnife.bind(this, stepView);
+            stepView.setOnClickListener(this);
         }
 
         public void bindTo(Step step) {
             mStepNumberTV.setText(String.valueOf(step.mId + 1));
             mDescriptionTV.setText(step.mShortDescription);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int adapterPosition = getAdapterPosition();
+            Step step = getData().get(adapterPosition);
+            if (mClickHandler != null) {
+                mClickHandler.onOptionClick(step);
+            }
         }
 
     }

@@ -5,12 +5,15 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.world.jst.android.bakingapp.R;
 import com.world.jst.android.bakingapp.fragment.RecipeIngredientsFragment;
 import com.world.jst.android.bakingapp.fragment.RecipeStepsFragment;
+import com.world.jst.android.bakingapp.model.Step;
 
-public class RecipeDetailsActivity extends AppCompatActivity {
+public class RecipeDetailsActivity extends AppCompatActivity
+        implements RecipeStepsFragment.RecipeStepsOnClickHandler {
 
     // Turn logging on or off
     private static final boolean L = false;
@@ -46,5 +49,10 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                     .add(R.id.steps_placeholder, fragmentSteps)
                     .commit();
         }
+    }
+
+    @Override
+    public void onOptionClick(Step step) {
+        Toast.makeText(this, step.mShortDescription, Toast.LENGTH_SHORT).show();
     }
 }
