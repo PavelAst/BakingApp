@@ -13,6 +13,6 @@ public class Ingredient extends RealmObject {
     public String mMeasure;
 
     @SerializedName("ingredient")
-    public String mIngredient;
+    public String mName;
 
 }
