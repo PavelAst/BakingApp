@@ -20,8 +20,8 @@ public class RecipesListActivity extends SingleFragmentActivity
         Bundle bundle = new Bundle();
         bundle.putInt(RecipeDetailsActivity.RECIPE_ITEM_ID, recipe.mId);
         bundle.putString(RecipeDetailsActivity.RECIPE_ITEM_NAME, recipe.mName);
+
         Intent intentRecipeDetails = new Intent(this, RecipeDetailsActivity.class);
-//        intentRecipeDetails.putExtra(RecipeDetailsActivity.RECIPE_ITEM_ID, recipe.mId);
         intentRecipeDetails.putExtras(bundle);
         startActivity(intentRecipeDetails);
     }

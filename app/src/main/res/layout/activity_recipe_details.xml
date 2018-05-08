@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activity.RecipeDetailsActivity">
+    android:layout_height="match_parent">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <FrameLayout
+            android:id="@+id/ingredients_placeholder"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:layout_height="wrap_content" />
 
-    </android.support.design.widget.AppBarLayout>
+        <!-- A small divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
 
-    <include layout="@layout/content_recipe_details" />
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/recipe_steps_fragment"
+            android:name="com.world.jst.android.bakingapp.fragment.RecipeStepsFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-</android.support.design.widget.CoordinatorLayout>
+    </LinearLayout>
+
+</ScrollView>

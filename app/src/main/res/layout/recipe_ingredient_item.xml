@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="4dp">
+    android:padding="2dp">
 
     <TextView
         android:id="@+id/ingredient_quantity_tv"
@@ -23,7 +23,7 @@
         android:gravity="center_vertical"
         android:paddingRight="8dp"
 
-        android:textColor="@color/colorAccent"
+        android:textColor="@android:color/background_dark"
         android:textSize="14sp"
         android:textStyle="italic"
         tools:text="K" />

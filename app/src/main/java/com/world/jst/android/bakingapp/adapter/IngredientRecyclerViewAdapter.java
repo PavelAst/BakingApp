@@ -52,7 +52,7 @@ public class IngredientRecyclerViewAdapter extends
         }
 
         public void bindTo(Ingredient ingredient) {
-            mQuantityTV.setText("" + ingredient.mQuantity);
+            mQuantityTV.setText(String.format("%s", ingredient.mQuantity));
             mIngredientMeasureTV.setText(ingredient.mMeasure);
             mIngredientNameTV.setText(ingredient.mName);
         }
