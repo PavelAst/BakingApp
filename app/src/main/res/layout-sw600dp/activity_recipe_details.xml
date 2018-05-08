@@ -24,9 +24,8 @@
                 android:layout_height="1dp"
                 android:background="@android:color/darker_gray" />
 
-            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/recipe_steps_fragment"
-                android:name="com.world.jst.android.bakingapp.fragment.RecipeStepsFragment"
+            <FrameLayout
+                android:id="@+id/steps_placeholder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

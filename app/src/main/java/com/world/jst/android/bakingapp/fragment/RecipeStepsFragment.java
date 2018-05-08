@@ -4,18 +4,49 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.world.jst.android.bakingapp.R;
+import com.world.jst.android.bakingapp.adapter.IngredientRecyclerViewAdapter;
+import com.world.jst.android.bakingapp.adapter.StepRecyclerViewAdapter;
+import com.world.jst.android.bakingapp.model.Recipe;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.realm.Realm;
 
 public class RecipeStepsFragment extends Fragment {
 
+    @BindView(R.id.recipe_steps_rv)
+    RecyclerView mRecipeStepsRecyclerView;
     private Unbinder mUnbinder;
+
+    private static final String RECIPE_ITEM_ID = "recipe_item_id";
+    private int mRecipeId;
+    private Recipe mRecipe;
+
+    public static RecipeStepsFragment newInstance(int recipeId) {
+        RecipeStepsFragment fragment = new RecipeStepsFragment();
+        Bundle args = new Bundle();
+        args.putInt(RECIPE_ITEM_ID, recipeId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public RecipeStepsFragment() {
+
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mRecipeId = getArguments().getInt(RECIPE_ITEM_ID, 1);
+    }
 
     @Nullable
     @Override
@@ -23,6 +54,19 @@ public class RecipeStepsFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recipe_steps, container, false);
         mUnbinder = ButterKnife.bind(this, view);
+
+        Realm realm = Realm.getDefaultInstance();
+        try {
+            mRecipe = realm.where(Recipe.class)
+                    .equalTo("mId", mRecipeId)
+                    .findFirst();
+        } finally {
+            realm.close();
+        }
+
+        mRecipeStepsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        StepRecyclerViewAdapter adapter = new StepRecyclerViewAdapter(mRecipe.mSteps);
+        mRecipeStepsRecyclerView.setAdapter(adapter);
 
         return view;
     }

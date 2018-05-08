@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.world.jst.android.bakingapp.R;
 import com.world.jst.android.bakingapp.fragment.RecipeIngredientsFragment;
+import com.world.jst.android.bakingapp.fragment.RecipeStepsFragment;
 
 public class RecipeDetailsActivity extends AppCompatActivity {
 
@@ -29,12 +30,20 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         }
 
         FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.ingredients_placeholder);
 
-        if (fragment == null) {
-            fragment = RecipeIngredientsFragment.newInstance(recipeId);
+        Fragment fragmentIngredients = fm.findFragmentById(R.id.ingredients_placeholder);
+        if (fragmentIngredients == null) {
+            fragmentIngredients = RecipeIngredientsFragment.newInstance(recipeId);
             fm.beginTransaction()
-                    .add(R.id.ingredients_placeholder, fragment)
+                    .add(R.id.ingredients_placeholder, fragmentIngredients)
+                    .commit();
+        }
+
+        Fragment fragmentSteps = fm.findFragmentById(R.id.steps_placeholder);
+        if (fragmentSteps == null) {
+            fragmentSteps = RecipeStepsFragment.newInstance(recipeId);
+            fm.beginTransaction()
+                    .add(R.id.steps_placeholder, fragmentSteps)
                     .commit();
         }
     }
