@@ -34,19 +34,19 @@ public class RecipeDetailsActivity extends AppCompatActivity
 
         FragmentManager fm = getSupportFragmentManager();
 
-        Fragment fragmentIngredients = fm.findFragmentById(R.id.ingredients_placeholder);
+        Fragment fragmentIngredients = fm.findFragmentById(R.id.recipe_ingredients_container);
         if (fragmentIngredients == null) {
             fragmentIngredients = RecipeIngredientsFragment.newInstance(recipeId);
             fm.beginTransaction()
-                    .add(R.id.ingredients_placeholder, fragmentIngredients)
+                    .add(R.id.recipe_ingredients_container, fragmentIngredients)
                     .commit();
         }
 
-        Fragment fragmentSteps = fm.findFragmentById(R.id.steps_placeholder);
+        Fragment fragmentSteps = fm.findFragmentById(R.id.recipe_steps_container);
         if (fragmentSteps == null) {
             fragmentSteps = RecipeStepsFragment.newInstance(recipeId);
             fm.beginTransaction()
-                    .add(R.id.steps_placeholder, fragmentSteps)
+                    .add(R.id.recipe_steps_container, fragmentSteps)
                     .commit();
         }
     }

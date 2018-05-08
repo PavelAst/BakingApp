@@ -9,7 +9,7 @@
         android:orientation="vertical">
 
         <FrameLayout
-            android:id="@+id/ingredients_placeholder"
+            android:id="@+id/recipe_ingredients_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -20,7 +20,7 @@
             android:background="@android:color/darker_gray" />
 
         <FrameLayout
-            android:id="@+id/steps_placeholder"
+            android:id="@+id/recipe_steps_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
