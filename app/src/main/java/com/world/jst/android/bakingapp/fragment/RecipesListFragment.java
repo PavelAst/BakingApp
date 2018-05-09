@@ -50,7 +50,7 @@ public class RecipesListFragment extends Fragment {
     private Unbinder mUnbinder;
 
     // Turn logging on or off
-    private static final boolean L = true;
+    private static final boolean L = false;
     private static final String TAG = "RecipesListFragment";
     private static final int COLUMN_WIDTH = 300;
     private int mFirstVisibleItemPosition = 0;
