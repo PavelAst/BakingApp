@@ -56,7 +56,8 @@ public class StepRecyclerViewAdapter extends
         }
 
         public void bindTo(Step step) {
-            mStepNumberTV.setText(String.valueOf(step.mId + 1));
+            int adapterPosition = getAdapterPosition();
+            mStepNumberTV.setText(String.valueOf(adapterPosition + 1));
             mDescriptionTV.setText(step.mShortDescription);
         }
 

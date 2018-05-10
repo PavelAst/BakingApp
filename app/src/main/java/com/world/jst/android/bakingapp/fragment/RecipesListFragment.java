@@ -18,7 +18,9 @@ import android.widget.TextView;
 
 import com.world.jst.android.bakingapp.R;
 import com.world.jst.android.bakingapp.adapter.RecipeRecyclerViewAdapter;
+import com.world.jst.android.bakingapp.model.Ingredient;
 import com.world.jst.android.bakingapp.model.Recipe;
+import com.world.jst.android.bakingapp.model.Step;
 import com.world.jst.android.bakingapp.network.RecipesAPI;
 import com.world.jst.android.bakingapp.utils.NetworkHelper;
 
@@ -215,8 +217,9 @@ public class RecipesListFragment extends Fragment {
         mRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+                realm.delete(Ingredient.class);
+                realm.delete(Step.class);
                 realm.insertOrUpdate(retrievedRecipes);
-
             }
         }, new Realm.Transaction.OnSuccess() {
             @Override

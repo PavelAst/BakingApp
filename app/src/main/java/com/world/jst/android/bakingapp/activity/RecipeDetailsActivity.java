@@ -127,12 +127,9 @@ public class RecipeDetailsActivity extends AppCompatActivity
         if (mTwoPane) {
             Toast.makeText(this, step.mShortDescription, Toast.LENGTH_SHORT).show();
         } else {
-            Bundle bundle = new Bundle();
-            bundle.putInt(RECIPE_ITEM_ID, mRecipeId);
-
-            Intent intentRecipeDetails = new Intent(this, StepDetailsActivity.class);
-            intentRecipeDetails.putExtras(bundle);
-            startActivity(intentRecipeDetails);
+            Intent intentStepDetails = StepDetailsActivity
+                    .newIntent(this, mRecipeId, step.mId);
+            startActivity(intentStepDetails);
         }
     }
 }
