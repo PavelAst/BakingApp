@@ -52,7 +52,10 @@ public class IngredientRecyclerViewAdapter extends
         }
 
         public void bindTo(Ingredient ingredient) {
-            mQuantityTV.setText(String.format("%s", ingredient.mQuantity));
+            String q = String.valueOf(ingredient.mQuantity);
+            String quantity = !q.contains(".") ? q : q.replaceAll("0*$", "")
+                    .replaceAll("\\.$", "");
+            mQuantityTV.setText(quantity);
             mIngredientMeasureTV.setText(ingredient.mMeasure);
             mIngredientNameTV.setText(ingredient.mName);
         }
