@@ -37,12 +37,12 @@
         android:layout_height="0dp"
         android:keepScreenOn="true"
         android:scaleType="centerInside"
-        android:src="@drawable/pretzel"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/guideline_player"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/pretzel" />
 
     <TextView
         android:id="@+id/step_short_description_tv"

@@ -1,6 +1,5 @@
 package com.world.jst.android.bakingapp.fragment;
 
-import android.annotation.SuppressLint;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -34,18 +33,13 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 import com.world.jst.android.bakingapp.R;
 import com.world.jst.android.bakingapp.player.ComponentListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-
-import static android.view.View.SYSTEM_UI_FLAG_FULLSCREEN;
-import static android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-import static android.view.View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-import static android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
-import static android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
 
 public class StepDetailsFragment extends Fragment {
 
@@ -62,7 +56,7 @@ public class StepDetailsFragment extends Fragment {
     private Unbinder mUnbinder;
 
     // Turn logging on or off
-    private static final boolean L = true;
+    private static final boolean L = false;
     private static final String TAG = "StepDetailsFragment";
     private static final String PLAYBACK_POSITION = "playback_position";
     private static final String PLAY_WHEN_READY = "play_when_ready";
@@ -185,8 +179,8 @@ public class StepDetailsFragment extends Fragment {
 
     private void initializePlayer() {
         if ((mVideoUrl == null) || mVideoUrl.isEmpty()) {
-            mThumbnailImageView.setVisibility(View.VISIBLE);
-            playerView.setVisibility(View.INVISIBLE);
+            showThumbnailImageView();
+            displayThumbnailImage();
             return;
         }
         if (player == null) {
@@ -202,6 +196,25 @@ public class StepDetailsFragment extends Fragment {
         }
         MediaSource mediaSource = buildMediaSource(Uri.parse(mVideoUrl));
         player.prepare(mediaSource, true, false);
+    }
+
+    private void showThumbnailImageView() {
+        mThumbnailImageView.setVisibility(View.VISIBLE);
+        playerView.setVisibility(View.INVISIBLE);
+    }
+
+    private void displayThumbnailImage() {
+        if (mThumbnailUrl != null && !mThumbnailUrl.isEmpty()) {
+            Picasso.get()
+                    .load(mThumbnailUrl)
+                    .placeholder(R.drawable.pretzel)
+                    .error(R.drawable.pretzel)
+                    .into(mThumbnailImageView);
+        } else {
+            Picasso.get()
+                    .load(R.drawable.pretzel)
+                    .into(mThumbnailImageView);
+        }
     }
 
     private void releasePlayer() {
@@ -250,9 +263,6 @@ public class StepDetailsFragment extends Fragment {
 
         int currentOrientation = newConfig.orientation;
         if (!mTwoPane && currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-//        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-//            hideSystemUiFullScreen();
-
             View decorView = getActivity().getWindow().getDecorView();
             // Hide the status bar.
             int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
@@ -280,34 +290,7 @@ public class StepDetailsFragment extends Fragment {
             mGuideline.setGuidelinePercent((float) 0.6);
             mShortDescriptionTextView.setVisibility(View.VISIBLE);
             mDescriptionTextView.setVisibility(View.VISIBLE);
-//            hideSystemUi();
         }
-    }
-
-    @SuppressLint("InlinedApi")
-    private void hideSystemUi() {
-        playerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
-                | SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                | SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-
-//        playerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-    }
-
-    @SuppressLint("InlinedApi")
-    private void hideSystemUiFullScreen() {
-        playerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
-                | SYSTEM_UI_FLAG_FULLSCREEN
-                | SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                | SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-
-//        playerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-//                | View.SYSTEM_UI_FLAG_FULLSCREEN
-//                | View.SYSTEM_UI_FLAG_IMMERSIVE);
     }
 
 }

@@ -123,15 +123,4 @@ public class StepDetailsActivity extends AppCompatActivity {
         }
     }
 
-//    @Override
-//    public void onConfigurationChanged(Configuration newConfig) {
-//        super.onConfigurationChanged(newConfig);
-//
-//        int currentOrientation = newConfig.orientation;
-//        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-//            mSlidingTabLayout.setVisibility(View.INVISIBLE);
-//        } else {
-//            mSlidingTabLayout.setVisibility(View.VISIBLE);
-//        }
-//    }
 }

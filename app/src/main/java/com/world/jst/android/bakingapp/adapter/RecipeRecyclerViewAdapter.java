@@ -65,7 +65,7 @@ public class RecipeRecyclerViewAdapter extends
         public void bindTo(Recipe recipe) {
             mRecipeNameTV.setText(recipe.mName);
             if (!recipe.mImage.isEmpty()) {
-                Picasso.with(mContext)
+                Picasso.get()
                         .load(recipe.mImage)
                         .placeholder(R.drawable.cake_default)
                         .error(R.drawable.cake_default)
