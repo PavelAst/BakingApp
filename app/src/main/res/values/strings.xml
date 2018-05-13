@@ -14,4 +14,9 @@
     <string name="action_settings">Settings</string>
     <string name="recipe_ingredients">Recipe Ingredients</string>
     <string name="ingredients_header">Ingredients</string>
+
+    <string name="string_previous">Previous</string>
+    <string name="string_next">Next</string>
+    <string name="string_pause">Pause</string>
+    <string name="string_play">Play</string>
 </resources>

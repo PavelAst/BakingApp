@@ -2,6 +2,7 @@ package com.world.jst.android.bakingapp.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 
 import com.world.jst.android.bakingapp.R;
 import com.world.jst.android.bakingapp.fragment.StepDetailsFragment;
@@ -83,7 +85,7 @@ public class StepDetailsActivity extends AppCompatActivity {
                 String videoUrl = step.mVideoUrl;
                 String thumbnailUrl = step.mThumbnailURL;
                 return StepDetailsFragment
-                        .newInstance(shortDescription, description, videoUrl, thumbnailUrl);
+                        .newInstance(shortDescription, description, videoUrl, thumbnailUrl, false);
             }
 
             @Override
@@ -106,4 +108,16 @@ public class StepDetailsActivity extends AppCompatActivity {
             }
         }
     }
+
+//    @Override
+//    public void onConfigurationChanged(Configuration newConfig) {
+//        super.onConfigurationChanged(newConfig);
+//
+//        int currentOrientation = newConfig.orientation;
+//        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+//            mSlidingTabLayout.setVisibility(View.INVISIBLE);
+//        } else {
+//            mSlidingTabLayout.setVisibility(View.VISIBLE);
+//        }
+//    }
 }

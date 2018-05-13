@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2016 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2016 The Android Open Source Project
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
      You may obtain a copy of the License at
@@ -11,12 +10,15 @@
      limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
-    android:background="#CC000000"
+    android:background="#80454962"
     android:layoutDirection="ltr"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="Overdraw"
+    tools:targetApi="jelly_bean_mr1">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,16 +28,14 @@
         android:paddingTop="4dp">
 
         <ImageButton
-            android:id="@id/exo_prev"
-            style="@style/ExoMediaButton.Previous" />
-
-        <ImageButton
             android:id="@id/exo_play"
-            style="@style/ExoMediaButton.Play" />
+            style="@style/ExoMediaButton.Play"
+            android:contentDescription="@string/string_play" />
 
         <ImageButton
             android:id="@id/exo_pause"
-            style="@style/ExoMediaButton.Pause" />
+            style="@style/ExoMediaButton.Pause"
+            android:contentDescription="@string/string_pause" />
 
     </LinearLayout>
 
@@ -57,13 +57,11 @@
             android:textSize="14sp"
             android:textStyle="bold" />
 
-        <SeekBar
+        <com.google.android.exoplayer2.ui.DefaultTimeBar
             android:id="@id/exo_progress"
-            style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="0dp"
-            android:layout_height="32dp"
-            android:layout_weight="1"
-            android:focusable="false" />
+            android:layout_height="26dp"
+            android:layout_weight="1" />
 
         <TextView
             android:id="@id/exo_duration"

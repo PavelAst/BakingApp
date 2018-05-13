@@ -99,7 +99,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
                     String videoUrl = step.mVideoUrl;
                     String thumbnailUrl = step.mThumbnailURL;
                     return StepDetailsFragment
-                            .newInstance(shortDescription, description, videoUrl, thumbnailUrl);
+                            .newInstance(shortDescription, description, videoUrl, thumbnailUrl, true);
                 }
 
                 @Override
