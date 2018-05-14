@@ -50,7 +50,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
         Intent initialIntent = getIntent();
         mRecipeId = initialIntent.getIntExtra(RECIPE_ITEM_ID, 1);
         String recipeName = initialIntent.getStringExtra(RECIPE_ITEM_NAME);
-        if (!recipeName.isEmpty()) {
+        if (recipeName != null && !recipeName.isEmpty()) {
             getSupportActionBar().setTitle(recipeName);
         }
 

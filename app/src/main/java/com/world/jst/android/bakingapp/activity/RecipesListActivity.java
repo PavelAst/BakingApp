@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 
 import com.world.jst.android.bakingapp.fragment.RecipesListFragment;
 import com.world.jst.android.bakingapp.model.Recipe;
+import com.world.jst.android.bakingapp.utils.CurrentRecipeData;
+import com.world.jst.android.bakingapp.widget.BakingAppRecipeService;
 
 public class RecipesListActivity extends SingleFragmentActivity
         implements RecipesListFragment.RecipeOnClickHandler {
@@ -20,6 +22,10 @@ public class RecipesListActivity extends SingleFragmentActivity
         Bundle bundle = new Bundle();
         bundle.putInt(RecipeDetailsActivity.RECIPE_ITEM_ID, recipe.mId);
         bundle.putString(RecipeDetailsActivity.RECIPE_ITEM_NAME, recipe.mName);
+
+        CurrentRecipeData.setRecipeId(this, recipe.mId);
+        CurrentRecipeData.setRecipeName(this, recipe.mName);
+        BakingAppRecipeService.startActionUpdatePlantWidgets(this);
 
         Intent intentRecipeDetails = new Intent(this, RecipeDetailsActivity.class);
         intentRecipeDetails.putExtras(bundle);
