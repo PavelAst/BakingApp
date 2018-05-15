@@ -45,6 +45,10 @@
         <service
             android:name=".widget.BakingAppRecipeService"
             android:exported="false" />
+        <service
+            android:name=".widget.ListViewWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
     </application>
 
 </manifest>

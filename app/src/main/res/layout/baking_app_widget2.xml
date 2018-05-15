@@ -1,6 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/widget_layout"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#d5d9da"
     android:orientation="vertical"
@@ -17,10 +18,15 @@
         android:textSize="18sp"
         android:textStyle="bold|italic" />
 
-    <ListView
-        android:id="@+id/widget_recipe_ingredients_lw"
-        android:fontFamily="@font/marvel"
+    <TextView
+        android:id="@+id/widget_all_ingredients_tv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        android:textColor="#081ab7"
+        android:textSize="14sp"
+        tools:text="Nutella or other chocolate-hazelnut spread" />
+    
 </LinearLayout>

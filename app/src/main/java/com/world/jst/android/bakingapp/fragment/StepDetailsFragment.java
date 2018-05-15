@@ -146,7 +146,6 @@ public class StepDetailsFragment extends Fragment {
     public void onResume() {
         if (L) Log.d(TAG, "*** StepDetailsFragment - onResume ***");
         super.onResume();
-        // hideSystemUi();  // ??
         if ((Util.SDK_INT <= 23 || player == null)) {
             initializePlayer();
         }
