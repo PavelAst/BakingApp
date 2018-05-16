@@ -30,10 +30,10 @@ public class RecipeStepsFragment extends Fragment {
     @BindView(R.id.recipe_steps_rv)
     RecyclerView mRecipeStepsRecyclerView;
     private Unbinder mUnbinder;
+    private Realm mRealm;
 
     private static final String RECIPE_ITEM_ID = "recipe_item_id";
     private int mRecipeId;
-    private Recipe mRecipe;
     private RecipeStepsOnClickHandler mListener;
 
     public static RecipeStepsFragment newInstance(int recipeId) {
@@ -67,17 +67,13 @@ public class RecipeStepsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_recipe_steps, container, false);
         mUnbinder = ButterKnife.bind(this, view);
 
-        Realm realm = Realm.getDefaultInstance();
-        try {
-            mRecipe = realm.where(Recipe.class)
-                    .equalTo("mId", mRecipeId)
-                    .findFirst();
-        } finally {
-            realm.close();
-        }
+        mRealm = Realm.getDefaultInstance();
+        Recipe recipe = mRealm.where(Recipe.class)
+                .equalTo("mId", mRecipeId)
+                .findFirst();
 
         mRecipeStepsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        StepRecyclerViewAdapter adapter = new StepRecyclerViewAdapter(mRecipe.mSteps, mListener);
+        StepRecyclerViewAdapter adapter = new StepRecyclerViewAdapter(recipe.mSteps, mListener);
         mRecipeStepsRecyclerView.setAdapter(adapter);
 
         return view;
@@ -86,6 +82,9 @@ public class RecipeStepsFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (mRealm != null) {
+            mRealm.close();
+        }
         mUnbinder.unbind();
     }
 

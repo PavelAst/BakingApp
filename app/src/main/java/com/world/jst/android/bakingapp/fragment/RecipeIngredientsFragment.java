@@ -28,6 +28,7 @@ public class RecipeIngredientsFragment extends Fragment {
     private static final String RECIPE_ITEM_ID = "recipe_item_id";
     private int mRecipeId;
     private Recipe mRecipe;
+    private Realm mRealm;
 
     public static RecipeIngredientsFragment newInstance(int recipeId) {
         RecipeIngredientsFragment fragment = new RecipeIngredientsFragment();
@@ -54,14 +55,10 @@ public class RecipeIngredientsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_recipe_ingredients, container, false);
         mUnbinder = ButterKnife.bind(this, view);
 
-        Realm realm = Realm.getDefaultInstance();
-        try {
-            mRecipe = realm.where(Recipe.class)
-                    .equalTo("mId", mRecipeId)
-                    .findFirst();
-        } finally {
-            realm.close();
-        }
+        mRealm = Realm.getDefaultInstance();
+        mRecipe = mRealm.where(Recipe.class)
+                .equalTo("mId", mRecipeId)
+                .findFirst();
 
         mRecipeIngredientsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         IngredientRecyclerViewAdapter adapter = new IngredientRecyclerViewAdapter(mRecipe.mIngredients);
@@ -73,6 +70,9 @@ public class RecipeIngredientsFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (mRealm != null) {
+            mRealm.close();
+        }
         mUnbinder.unbind();
     }
 

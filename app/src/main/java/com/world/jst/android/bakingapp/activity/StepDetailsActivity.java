@@ -31,17 +31,7 @@ public class StepDetailsActivity extends AppCompatActivity {
     private static final String TAG = "StepDetailsActivity";
     public static final String RECIPE_ITEM_ID = "recipe_item_id";
     public static final String STEP_ID = "step_id";
-    private int mRecipeId;
-    private int mStepId;
-    /**
-     * A custom {@link ViewPager} title strip which looks much like Tabs present in Android v4.0 and
-     * above, but is designed to give continuous feedback to the user when scrolling.
-     */
-    private SlidingTabLayout mSlidingTabLayout;
-    /**
-     * A {@link ViewPager} which will be used in conjunction with the {@link SlidingTabLayout} above.
-     */
-    private ViewPager mRecipeStepViewPager;
+    private Realm mRealm;
 
     public static Intent newIntent(Context packageContext, int recipeId, int stepId) {
         Intent intent = new Intent(packageContext, StepDetailsActivity.class);
@@ -69,28 +59,30 @@ public class StepDetailsActivity extends AppCompatActivity {
         }
 
         Intent initialIntent = getIntent();
-        mRecipeId = initialIntent.getIntExtra(RECIPE_ITEM_ID, 1);
-        mStepId = initialIntent.getIntExtra(STEP_ID, 1);
+        int recipeId = initialIntent.getIntExtra(RECIPE_ITEM_ID, 1);
+        int stepId = initialIntent.getIntExtra(STEP_ID, 1);
 
-        if (L) Log.d(TAG, "mRecipeId = " + mRecipeId);
+        if (L) Log.d(TAG, "mRecipeId = " + recipeId);
 
-        mSlidingTabLayout = findViewById(R.id.steps_sliding_tabs);
-        mRecipeStepViewPager = findViewById(R.id.recipe_steps_vp);
+        /*
+          A custom {@link ViewPager} title strip which looks much like Tabs present in Android v4.0 and
+          above, but is designed to give continuous feedback to the user when scrolling.
+        */
+        SlidingTabLayout slidingTabLayout = findViewById(R.id.steps_sliding_tabs);
+        /*
+          A {@link ViewPager} which will be used in conjunction with the {@link SlidingTabLayout} above.
+         */
+        ViewPager recipeStepViewPager = findViewById(R.id.recipe_steps_vp);
 
-        Realm realm = Realm.getDefaultInstance();
-        Recipe recipe;
-        final RealmList<Step> steps;
-        try {
-            recipe = realm.where(Recipe.class)
-                    .equalTo("mId", mRecipeId)
-                    .findFirst();
-            steps = recipe.mSteps;
-        } finally {
-            realm.close();
-        }
+        mRealm = Realm.getDefaultInstance();
+
+        Recipe recipe = mRealm.where(Recipe.class)
+                .equalTo("mId", recipeId)
+                .findFirst();
+        final RealmList<Step> steps = recipe.mSteps;
 
         FragmentManager fm = getSupportFragmentManager();
-        mRecipeStepViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
+        recipeStepViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
             @Override
             public Fragment getItem(int position) {
                 Step step = steps.get(position);
@@ -113,13 +105,21 @@ public class StepDetailsActivity extends AppCompatActivity {
                 return "Step " + (position + 1);
             }
         });
-        mSlidingTabLayout.setViewPager(mRecipeStepViewPager);
+        slidingTabLayout.setViewPager(recipeStepViewPager);
 
         for (int i = 0; i < steps.size(); i++) {
-            if (steps.get(i).mId == mStepId) {
-                mRecipeStepViewPager.setCurrentItem(i);
+            if (steps.get(i).mId == stepId) {
+                recipeStepViewPager.setCurrentItem(i);
                 break;
             }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mRealm != null) {
+            mRealm.close();
         }
     }
 

@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.world.jst.android.bakingapp.R;
 import com.world.jst.android.bakingapp.fragment.RecipeIngredientsFragment;
@@ -32,6 +31,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
     public static final String RECIPE_ITEM_NAME = "recipe_item_name";
     private boolean mTwoPane;
     private int mRecipeId;
+    private Realm mRealm;
     /**
      * A custom {@link ViewPager} title strip which looks much like Tabs present in Android v4.0 and
      * above, but is designed to give continuous feedback to the user when scrolling.
@@ -78,17 +78,12 @@ public class RecipeDetailsActivity extends AppCompatActivity
             mSlidingTabLayout = findViewById(R.id.steps_sliding_tabs);
             mRecipeStepViewPager = findViewById(R.id.recipe_steps_vp);
 
-            Realm realm = Realm.getDefaultInstance();
-            Recipe recipe;
-            final RealmList<Step> steps;
-            try {
-                recipe = realm.where(Recipe.class)
-                        .equalTo("mId", mRecipeId)
-                        .findFirst();
-                steps = recipe.mSteps;
-            } finally {
-                realm.close();
-            }
+            mRealm = Realm.getDefaultInstance();
+
+            Recipe recipe = mRealm.where(Recipe.class)
+                    .equalTo("mId", mRecipeId)
+                    .findFirst();
+            final RealmList<Step> steps = recipe.mSteps;
 
             mRecipeStepViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
                 @Override
@@ -130,6 +125,14 @@ public class RecipeDetailsActivity extends AppCompatActivity
             Intent intentStepDetails = StepDetailsActivity
                     .newIntent(this, mRecipeId, step.mId);
             startActivity(intentStepDetails);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mRealm != null) {
+            mRealm.close();
         }
     }
 }

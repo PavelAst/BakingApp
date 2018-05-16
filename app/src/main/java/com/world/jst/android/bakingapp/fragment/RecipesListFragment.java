@@ -145,7 +145,9 @@ public class RecipesListFragment extends Fragment {
         if (mRecipeCall != null) {
             mRecipeCall.cancel();
         }
-        mRealm.close();
+        if (mRealm != null) {
+            mRealm.close();
+        }
         super.onDestroyView();
         mUnbinder.unbind();
     }
