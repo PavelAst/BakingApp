@@ -24,7 +24,7 @@ import io.realm.Realm;
 public class RecipeStepsFragment extends Fragment {
 
     public interface RecipeStepsOnClickHandler {
-        void onOptionClick(Step step);
+        void onOptionClick(Step step, int position);
     }
 
     @BindView(R.id.recipe_steps_rv)

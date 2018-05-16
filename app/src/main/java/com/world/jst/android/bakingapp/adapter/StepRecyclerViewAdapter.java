@@ -66,7 +66,7 @@ public class StepRecyclerViewAdapter extends
             int adapterPosition = getAdapterPosition();
             Step step = getData().get(adapterPosition);
             if (mClickHandler != null) {
-                mClickHandler.onOptionClick(step);
+                mClickHandler.onOptionClick(step, adapterPosition);
             }
         }
 

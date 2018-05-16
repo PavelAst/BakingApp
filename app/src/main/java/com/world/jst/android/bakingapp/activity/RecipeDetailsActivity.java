@@ -123,9 +123,9 @@ public class RecipeDetailsActivity extends AppCompatActivity
     }
 
     @Override
-    public void onOptionClick(Step step) {
+    public void onOptionClick(Step step, int position) {
         if (mTwoPane) {
-            Toast.makeText(this, step.mShortDescription, Toast.LENGTH_SHORT).show();
+            mRecipeStepViewPager.setCurrentItem(position);
         } else {
             Intent intentStepDetails = StepDetailsActivity
                     .newIntent(this, mRecipeId, step.mId);
