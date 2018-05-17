@@ -10,6 +10,7 @@
         android:layout_margin="@dimen/text_margin"
         android:fontFamily="@font/marvel_bold"
         android:text="@string/recipe_ingredients"
+        android:textColor="@color/primary_text"
         android:textSize="24sp"
         android:textStyle="bold" />
 

@@ -13,13 +13,12 @@
         android:layout_margin="4dp"
         android:text="@string/appwidget_text"
         android:textAlignment="center"
-        android:textColor="#b70808"
+        android:textColor="@color/primary_text"
         android:textSize="18sp"
         android:textStyle="bold|italic" />
 
     <ListView
         android:id="@+id/widget_recipe_ingredients_lw"
-        android:fontFamily="@font/marvel"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
