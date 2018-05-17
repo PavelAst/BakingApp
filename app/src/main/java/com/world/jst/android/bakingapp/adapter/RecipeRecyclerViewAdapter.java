@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,8 +67,12 @@ public class RecipeRecyclerViewAdapter extends
             if (!recipe.mImage.isEmpty()) {
                 Picasso.get()
                         .load(recipe.mImage)
-                        .placeholder(R.drawable.cake_default)
-                        .error(R.drawable.cake_default)
+                        .placeholder(R.drawable.cake_placeholder)
+                        .error(R.drawable.cake_placeholder)
+                        .into(mRecipePosterIV);
+            } else {
+                Picasso.get()
+                        .load(R.drawable.cake_placeholder)
                         .into(mRecipePosterIV);
             }
         }

@@ -34,11 +34,6 @@ public class RecipeDetailsActivity extends AppCompatActivity
     private int mRecipeId;
     private Realm mRealm;
     /**
-     * A custom {@link ViewPager} title strip which looks much like Tabs present in Android v4.0 and
-     * above, but is designed to give continuous feedback to the user when scrolling.
-     */
-    private SlidingTabLayout mSlidingTabLayout;
-    /**
      * A {@link ViewPager} which will be used in conjunction with the {@link SlidingTabLayout} above.
      */
     private ViewPager mRecipeStepViewPager;
@@ -76,7 +71,11 @@ public class RecipeDetailsActivity extends AppCompatActivity
         if (findViewById(R.id.steps_linear_layout) != null) {
             mTwoPane = true;
             if (L) Log.d(TAG, "mTwoPane = true");
-            mSlidingTabLayout = findViewById(R.id.steps_sliding_tabs);
+            /*
+      A custom {@link ViewPager} title strip which looks much like Tabs present in Android v4.0 and
+      above, but is designed to give continuous feedback to the user when scrolling.
+     */
+            SlidingTabLayout slidingTabLayout = findViewById(R.id.steps_sliding_tabs);
             mRecipeStepViewPager = findViewById(R.id.recipe_steps_vp);
 
             mRealm = Realm.getDefaultInstance();
@@ -109,7 +108,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
                     return "Step " + (position + 1);
                 }
             });
-            mSlidingTabLayout.setViewPager(mRecipeStepViewPager);
+            slidingTabLayout.setViewPager(mRecipeStepViewPager);
 
         } else {
             // We're in single-pane mode and displaying fragments on a phone in separate activities

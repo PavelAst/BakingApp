@@ -16,8 +16,7 @@
             android:id="@+id/recipe_poster_iv"
             android:layout_width="match_parent"
             android:layout_height="@dimen/poster_height"
-            android:scaleType="fitCenter"
-            android:src="@drawable/cake_default" />
+            android:scaleType="fitCenter" />
 
         <TextView
             android:id="@+id/recipe_name_tv"

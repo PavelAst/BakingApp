@@ -1,7 +1,6 @@
 package com.world.jst.android.bakingapp.fragment;
 
 import android.content.res.Configuration;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -74,12 +73,12 @@ public class StepDetailsFragment extends Fragment {
     private String mThumbnailUrl;
     private boolean mTwoPane;
 
-    private SimpleExoPlayer player;
-    private ComponentListener componentListener;
+    private SimpleExoPlayer mPlayer;
+    private ComponentListener mComponentListener;
 
-    private long playbackPosition;
-    private int currentWindow;
-    private boolean playWhenReady = false;
+    private long mPlaybackPosition;
+    private int mCurrentWindow;
+    private boolean mPlayWhenReady = false;
 
     public static StepDetailsFragment newInstance(String shortDescription, String description,
                                                   String videoUrl, String thumbnailUrl,
@@ -118,14 +117,21 @@ public class StepDetailsFragment extends Fragment {
         mUnbinder = ButterKnife.bind(this, view);
 
         if (savedInstanceState != null) {
-            playbackPosition = savedInstanceState.getLong(PLAYBACK_POSITION);
-            currentWindow = savedInstanceState.getInt(CURRENT_WINDOW);
-            playWhenReady = savedInstanceState.getBoolean(PLAY_WHEN_READY);
+            mPlaybackPosition = savedInstanceState.getLong(PLAYBACK_POSITION);
+            mCurrentWindow = savedInstanceState.getInt(CURRENT_WINDOW);
+            mPlayWhenReady = savedInstanceState.getBoolean(PLAY_WHEN_READY);
         }
 
-        componentListener = new ComponentListener();
-        playerView.setDefaultArtwork(BitmapFactory.decodeResource(getContext().getResources(),
-                R.drawable.pretzel));
+        mComponentListener = new ComponentListener();
+
+        playerView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (!hasFocus) {
+                    mPlayer.stop();
+                }
+            }
+        });
 
         mShortDescriptionTextView.setText(mShortDescription);
         mDescriptionTextView.setText(mDescription);
@@ -146,7 +152,7 @@ public class StepDetailsFragment extends Fragment {
     public void onResume() {
         if (L) Log.d(TAG, "*** StepDetailsFragment - onResume ***");
         super.onResume();
-        if ((Util.SDK_INT <= 23 || player == null)) {
+        if ((Util.SDK_INT <= 23 || mPlayer == null)) {
             initializePlayer();
         }
     }
@@ -182,19 +188,19 @@ public class StepDetailsFragment extends Fragment {
             displayThumbnailImage();
             return;
         }
-        if (player == null) {
+        if (mPlayer == null) {
             if (L) Log.d(TAG, "*** StepDetailsFragment - initializePlayer ***");
-            player = ExoPlayerFactory.newSimpleInstance(new DefaultRenderersFactory(getActivity()),
+            mPlayer = ExoPlayerFactory.newSimpleInstance(new DefaultRenderersFactory(getActivity()),
                     new DefaultTrackSelector(), new DefaultLoadControl());
-            player.addListener(componentListener);
-            player.addVideoDebugListener(componentListener);
-            player.addAudioDebugListener(componentListener);
-            playerView.setPlayer(player);
-            player.setPlayWhenReady(playWhenReady);
-            player.seekTo(currentWindow, playbackPosition);
+            mPlayer.addListener(mComponentListener);
+            mPlayer.addVideoDebugListener(mComponentListener);
+            mPlayer.addAudioDebugListener(mComponentListener);
+            playerView.setPlayer(mPlayer);
+            mPlayer.setPlayWhenReady(mPlayWhenReady);
+            mPlayer.seekTo(mCurrentWindow, mPlaybackPosition);
         }
         MediaSource mediaSource = buildMediaSource(Uri.parse(mVideoUrl));
-        player.prepare(mediaSource, true, false);
+        mPlayer.prepare(mediaSource, true, false);
     }
 
     private void showThumbnailImageView() {
@@ -206,27 +212,27 @@ public class StepDetailsFragment extends Fragment {
         if (mThumbnailUrl != null && !mThumbnailUrl.isEmpty()) {
             Picasso.get()
                     .load(mThumbnailUrl)
-                    .placeholder(R.drawable.pretzel)
-                    .error(R.drawable.pretzel)
+                    .placeholder(R.drawable.bakery_new)
+                    .error(R.drawable.bakery_new)
                     .into(mThumbnailImageView);
         } else {
             Picasso.get()
-                    .load(R.drawable.pretzel)
+                    .load(R.drawable.bakery_new)
                     .into(mThumbnailImageView);
         }
     }
 
     private void releasePlayer() {
-        if (player != null) {
+        if (mPlayer != null) {
             if (L) Log.d(TAG, "*** StepDetailsFragment - releasePlayer ***");
-            playbackPosition = player.getCurrentPosition();
-            currentWindow = player.getCurrentWindowIndex();
-            playWhenReady = player.getPlayWhenReady();
-            player.removeListener(componentListener);
-            player.removeVideoDebugListener(componentListener);
-            player.removeAudioDebugListener(componentListener);
-            player.release();
-            player = null;
+            mPlaybackPosition = mPlayer.getCurrentPosition();
+            mCurrentWindow = mPlayer.getCurrentWindowIndex();
+            mPlayWhenReady = mPlayer.getPlayWhenReady();
+            mPlayer.removeListener(mComponentListener);
+            mPlayer.removeVideoDebugListener(mComponentListener);
+            mPlayer.removeAudioDebugListener(mComponentListener);
+            mPlayer.release();
+            mPlayer = null;
         }
     }
 
@@ -251,9 +257,9 @@ public class StepDetailsFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putLong(PLAYBACK_POSITION, playbackPosition);
-        outState.putInt(CURRENT_WINDOW, currentWindow);
-        outState.putBoolean(PLAY_WHEN_READY, playWhenReady);
+        outState.putLong(PLAYBACK_POSITION, mPlaybackPosition);
+        outState.putInt(CURRENT_WINDOW, mCurrentWindow);
+        outState.putBoolean(PLAY_WHEN_READY, mPlayWhenReady);
     }
 
     @Override
