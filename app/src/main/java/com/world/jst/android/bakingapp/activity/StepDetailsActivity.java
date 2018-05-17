@@ -29,12 +29,14 @@ public class StepDetailsActivity extends AppCompatActivity {
     // Turn logging on or off
     private static final boolean L = true;
     private static final String TAG = "StepDetailsActivity";
+    public static final String RECIPE_ITEM_NAME = "recipe_item_name";
     public static final String RECIPE_ITEM_ID = "recipe_item_id";
     public static final String STEP_ID = "step_id";
     private Realm mRealm;
 
-    public static Intent newIntent(Context packageContext, int recipeId, int stepId) {
+    public static Intent newIntent(Context packageContext, String recipeName, int recipeId, int stepId) {
         Intent intent = new Intent(packageContext, StepDetailsActivity.class);
+        intent.putExtra(RECIPE_ITEM_NAME, recipeName);
         intent.putExtra(RECIPE_ITEM_ID, recipeId);
         intent.putExtra(STEP_ID, stepId);
         return intent;
@@ -44,6 +46,11 @@ public class StepDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_details);
+
+        Intent initialIntent = getIntent();
+        String recipeName = initialIntent.getStringExtra(RECIPE_ITEM_NAME);
+        int recipeId = initialIntent.getIntExtra(RECIPE_ITEM_ID, 1);
+        int stepId = initialIntent.getIntExtra(STEP_ID, 1);
 
         int currentOrientation = getResources().getConfiguration().orientation;
         if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -56,11 +63,11 @@ public class StepDetailsActivity extends AppCompatActivity {
             if (actionBar != null) {
                 actionBar.hide();
             }
+        } else {
+            if (recipeName != null && !recipeName.isEmpty()) {
+                getSupportActionBar().setTitle(recipeName);
+            }
         }
-
-        Intent initialIntent = getIntent();
-        int recipeId = initialIntent.getIntExtra(RECIPE_ITEM_ID, 1);
-        int stepId = initialIntent.getIntExtra(STEP_ID, 1);
 
         if (L) Log.d(TAG, "mRecipeId = " + recipeId);
 

@@ -30,6 +30,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
     public static final String RECIPE_ITEM_ID = "recipe_item_id";
     public static final String RECIPE_ITEM_NAME = "recipe_item_name";
     private boolean mTwoPane;
+    private String mRecipeName;
     private int mRecipeId;
     private Realm mRealm;
     /**
@@ -49,9 +50,9 @@ public class RecipeDetailsActivity extends AppCompatActivity
 
         Intent initialIntent = getIntent();
         mRecipeId = initialIntent.getIntExtra(RECIPE_ITEM_ID, 1);
-        String recipeName = initialIntent.getStringExtra(RECIPE_ITEM_NAME);
-        if (recipeName != null && !recipeName.isEmpty()) {
-            getSupportActionBar().setTitle(recipeName);
+        mRecipeName = initialIntent.getStringExtra(RECIPE_ITEM_NAME);
+        if (mRecipeName != null && !mRecipeName.isEmpty()) {
+            getSupportActionBar().setTitle(mRecipeName);
         }
 
         FragmentManager fm = getSupportFragmentManager();
@@ -123,7 +124,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
             mRecipeStepViewPager.setCurrentItem(position);
         } else {
             Intent intentStepDetails = StepDetailsActivity
-                    .newIntent(this, mRecipeId, step.mId);
+                    .newIntent(this, mRecipeName, mRecipeId, step.mId);
             startActivity(intentStepDetails);
         }
     }

@@ -30,43 +30,34 @@ public class BakingAppWidget extends AppWidgetProvider {
                                 ArrayList<IngredientParcelable> ingredientParcelables) {
 
         Log.d("Widgets", "### In BakingAppWidget - updateAppWidget");
+
+//        // Construct the RemoteViews object
+//        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
+//        if (recipeName != null && !recipeName.isEmpty()) {
+//            views.setTextViewText(R.id.widget_recipe_name_tv, recipeName);
+//        }
+//        // Set the ListViewWidgetService intent to act as the adapter for the ListView
+//        Intent intent = new Intent(context, ListViewWidgetService.class);
+//        intent.putParcelableArrayListExtra(AppWidgetManager.EXTRA_CUSTOM_EXTRAS, ingredientParcelables);
+//        views.setRemoteAdapter(R.id.widget_recipe_ingredients_lw, intent);
+//
+//        // Create an Intent to launch RecipeDetailsActivity when clicked
+//        Bundle bundle = new Bundle();
+//        bundle.putInt(RECIPE_ITEM_ID, recipeId);
+//        bundle.putString(RECIPE_ITEM_NAME, recipeName);
+//
+//        Intent appIntent = new Intent(context, RecipeDetailsActivity.class);
+//        appIntent.putExtras(bundle);
+//        PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, FLAG_UPDATE_CURRENT);
+//        // Widgets allow click handlers to only launch pending intents
+//        views.setOnClickPendingIntent(R.id.widget_layout, appPendingIntent);
+
+        // Simple solution
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget2);
         if (recipeName != null && !recipeName.isEmpty()) {
             views.setTextViewText(R.id.widget_recipe_name_tv, recipeName);
         }
-
-//        PendingIntent appPendingIntent;
-//        if (recipeId < 1 || recipeName == null) {
-//            Intent appIntent = new Intent(context, RecipesListActivity.class);
-//            appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, 0);
-//        } else {
-//            // Set the ListViewWidgetService intent to act as the adapter for the ListView
-//            Intent intent = new Intent(context, ListViewWidgetService.class);
-//            intent.putParcelableArrayListExtra(AppWidgetManager.EXTRA_CUSTOM_EXTRAS, ingredientParcelables);
-//            views.setRemoteAdapter(R.id.widget_recipe_ingredients_lw, intent);
-//
-//            // Create an Intent to launch RecipeDetailsActivity when clicked
-//            Bundle bundle = new Bundle();
-//            bundle.putInt(RecipeDetailsActivity.RECIPE_ITEM_ID, recipeId);
-//            bundle.putString(RecipeDetailsActivity.RECIPE_ITEM_NAME, recipeName);
-//
-//            Intent appIntent = new Intent(context, RecipeDetailsActivity.class);
-//            appIntent.putExtras(bundle);
-//            appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, FLAG_UPDATE_CURRENT);
-//        }
-//
-//        // Widgets allow click handlers to only launch pending intents
-//        views.setOnClickPendingIntent(R.id.widget_layout, appPendingIntent);
-//
-//        // Set the ListViewWidgetService intent to act as the adapter for the ListView
-//        Intent intent = new Intent(context, ListViewWidgetService.class);
-//        intent.putParcelableArrayListExtra(AppWidgetManager.EXTRA_CUSTOM_EXTRAS, ingredientParcelables);
-//        Log.d("Widgets", "### In BakingAppWidget - updateAppWidget - ingredientParcelables: " + ingredientParcelables.size());
-//        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-//        views.setRemoteAdapter(R.id.widget_recipe_ingredients_lw, intent);
-
-        // Simple solution
         if (ingredientParcelables != null && !ingredientParcelables.isEmpty()) {
             Log.d("Widgets", "### In BakingAppWidget - updateAppWidget - ingredientParcelables: " + ingredientParcelables.size());
             StringBuilder ingredients = new StringBuilder();
