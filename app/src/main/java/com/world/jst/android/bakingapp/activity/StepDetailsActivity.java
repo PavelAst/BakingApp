@@ -27,7 +27,7 @@ import io.realm.RealmList;
 public class StepDetailsActivity extends AppCompatActivity {
 
     // Turn logging on or off
-    private static final boolean L = true;
+    private static final boolean L = false;
     private static final String TAG = "StepDetailsActivity";
     public static final String RECIPE_ITEM_NAME = "recipe_item_name";
     public static final String RECIPE_ITEM_ID = "recipe_item_id";
@@ -64,8 +64,12 @@ public class StepDetailsActivity extends AppCompatActivity {
                 actionBar.hide();
             }
         } else {
-            if (recipeName != null && !recipeName.isEmpty()) {
-                getSupportActionBar().setTitle(recipeName);
+            ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                if (recipeName != null && !recipeName.isEmpty()) {
+                    actionBar.setTitle(recipeName);
+                }
             }
         }
 

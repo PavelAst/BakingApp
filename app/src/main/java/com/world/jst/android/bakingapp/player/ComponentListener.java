@@ -12,7 +12,7 @@ import com.google.android.exoplayer2.video.VideoRendererEventListener;
 public class ComponentListener extends Player.DefaultEventListener implements
         VideoRendererEventListener, AudioRendererEventListener {
 
-    private static final boolean L = true;
+    private static final boolean L = false;
     private static final String TAG = "StepDetailsFragment+";
 
     @Override

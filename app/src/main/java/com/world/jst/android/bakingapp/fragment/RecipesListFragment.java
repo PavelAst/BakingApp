@@ -89,7 +89,7 @@ public class RecipesListFragment extends Fragment {
         int numberOfColumns = 1;
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), numberOfColumns);
         mRecipeRecyclerView.setLayoutManager(layoutManager);
-        mAdapter = new RecipeRecyclerViewAdapter(getActivity(), recipes, mCallbacks);
+        mAdapter = new RecipeRecyclerViewAdapter(recipes, mCallbacks);
         mRecipeRecyclerView.setAdapter(mAdapter);
         if (mAdapter.getItemCount() > 0) {
             showRecipes();

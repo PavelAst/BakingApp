@@ -27,7 +27,6 @@ public class RecipeIngredientsFragment extends Fragment {
 
     private static final String RECIPE_ITEM_ID = "recipe_item_id";
     private int mRecipeId;
-    private Recipe mRecipe;
     private Realm mRealm;
 
     public static RecipeIngredientsFragment newInstance(int recipeId) {
@@ -56,12 +55,12 @@ public class RecipeIngredientsFragment extends Fragment {
         mUnbinder = ButterKnife.bind(this, view);
 
         mRealm = Realm.getDefaultInstance();
-        mRecipe = mRealm.where(Recipe.class)
+        Recipe recipe = mRealm.where(Recipe.class)
                 .equalTo("mId", mRecipeId)
                 .findFirst();
 
         mRecipeIngredientsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        IngredientRecyclerViewAdapter adapter = new IngredientRecyclerViewAdapter(mRecipe.mIngredients);
+        IngredientRecyclerViewAdapter adapter = new IngredientRecyclerViewAdapter(recipe.mIngredients);
         mRecipeIngredientsRecyclerView.setAdapter(adapter);
 
         return view;

@@ -22,6 +22,8 @@ import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
  */
 public class BakingAppWidget extends AppWidgetProvider {
 
+    // Turn logging on or off
+    private static final boolean L = false;
     private static final String RECIPE_ITEM_ID = "recipe_item_id";
     private static final String RECIPE_ITEM_NAME = "recipe_item_name";
 
@@ -29,7 +31,7 @@ public class BakingAppWidget extends AppWidgetProvider {
                                 int appWidgetId, int recipeId, String recipeName,
                                 ArrayList<IngredientParcelable> ingredientParcelables) {
 
-        Log.d("Widgets", "### In BakingAppWidget - updateAppWidget");
+        if (L) Log.d("Widgets", "### In BakingAppWidget - updateAppWidget");
 
 //        // Construct the RemoteViews object
 //        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
@@ -59,7 +61,7 @@ public class BakingAppWidget extends AppWidgetProvider {
             views.setTextViewText(R.id.widget_recipe_name_tv, recipeName);
         }
         if (ingredientParcelables != null && !ingredientParcelables.isEmpty()) {
-            Log.d("Widgets", "### In BakingAppWidget - updateAppWidget - ingredientParcelables: " + ingredientParcelables.size());
+            if (L) Log.d("Widgets", "### In BakingAppWidget - updateAppWidget - ingredientParcelables: " + ingredientParcelables.size());
             StringBuilder ingredients = new StringBuilder();
             for (IngredientParcelable ingredient : ingredientParcelables) {
                 ingredients.append(ingredient.toString());
@@ -74,6 +76,7 @@ public class BakingAppWidget extends AppWidgetProvider {
 
         Intent appIntent = new Intent(context, RecipeDetailsActivity.class);
         appIntent.putExtras(bundle);
+
         PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, FLAG_UPDATE_CURRENT);
 
         // Widgets allow click handlers to only launch pending intents

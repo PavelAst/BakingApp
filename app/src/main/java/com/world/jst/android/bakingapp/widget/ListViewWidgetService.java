@@ -16,7 +16,6 @@ public class ListViewWidgetService extends RemoteViewsService {
 
     @Override
     public RemoteViewsFactory onGetViewFactory(android.content.Intent intent) {
-        Log.d("Widgets", "### In ListViewWidgetService - onGetViewFactory");
         return new AppWidgetListView(this.getApplicationContext(), intent);
     }
 
@@ -24,6 +23,8 @@ public class ListViewWidgetService extends RemoteViewsService {
 
 class AppWidgetListView implements RemoteViewsService.RemoteViewsFactory {
 
+    // Turn logging on or off
+    private static final boolean L = false;
     private Context mContext;
     private ArrayList<IngredientParcelable> mIngredients;
 
@@ -31,7 +32,7 @@ class AppWidgetListView implements RemoteViewsService.RemoteViewsFactory {
         mContext = context;
         if (intent.hasExtra(AppWidgetManager.EXTRA_CUSTOM_EXTRAS)) {
             mIngredients = intent.getParcelableArrayListExtra(AppWidgetManager.EXTRA_CUSTOM_EXTRAS);
-            Log.d("Widgets", "### In ListViewWidgetService - ingredientParcelables: " + mIngredients.size());
+            if (L) Log.d("Widgets", "### In ListViewWidgetService - ingredientParcelables: " + mIngredients.size());
         }
     }
 

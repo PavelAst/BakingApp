@@ -23,14 +23,11 @@ import io.realm.RealmRecyclerViewAdapter;
 public class RecipeRecyclerViewAdapter extends
         RealmRecyclerViewAdapter<Recipe, RecipeRecyclerViewAdapter.RecipeViewHolder> {
 
-    private final Context mContext;
     private final RecipesListFragment.RecipeOnClickHandler mClickHandler;
 
-    public RecipeRecyclerViewAdapter(Context context,
-                                     @Nullable OrderedRealmCollection<Recipe> data,
+    public RecipeRecyclerViewAdapter(@Nullable OrderedRealmCollection<Recipe> data,
                                      RecipesListFragment.RecipeOnClickHandler clickHandler) {
         super(data, true);
-        mContext = context;
         mClickHandler = clickHandler;
     }
 
