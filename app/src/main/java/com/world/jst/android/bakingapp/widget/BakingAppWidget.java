@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -14,8 +15,6 @@ import com.world.jst.android.bakingapp.activity.RecipeDetailsActivity;
 import com.world.jst.android.bakingapp.model.IngredientParcelable;
 
 import java.util.ArrayList;
-
-import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 
 /**
  * Implementation of App Widget functionality.
@@ -74,10 +73,15 @@ public class BakingAppWidget extends AppWidgetProvider {
         bundle.putInt(RECIPE_ITEM_ID, recipeId);
         bundle.putString(RECIPE_ITEM_NAME, recipeName);
 
+        // Create an Intent for the activity you want to start
         Intent appIntent = new Intent(context, RecipeDetailsActivity.class);
         appIntent.putExtras(bundle);
-
-        PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, FLAG_UPDATE_CURRENT);
+        // Create the TaskStackBuilder and add the intent, which inflates the back stack
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        stackBuilder.addNextIntentWithParentStack(appIntent);
+        // Get the PendingIntent containing the entire back stack
+        PendingIntent appPendingIntent =
+                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Widgets allow click handlers to only launch pending intents
         views.setOnClickPendingIntent(R.id.widget_layout, appPendingIntent);
