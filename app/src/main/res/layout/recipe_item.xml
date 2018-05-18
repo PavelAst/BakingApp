@@ -16,6 +16,7 @@
             android:id="@+id/recipe_poster_iv"
             android:layout_width="match_parent"
             android:layout_height="@dimen/poster_height"
+            android:adjustViewBounds="true"
             android:scaleType="fitCenter" />
 
         <TextView

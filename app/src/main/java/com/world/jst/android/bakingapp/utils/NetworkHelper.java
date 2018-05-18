@@ -4,7 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-public class NetworkHelper {
+public final class NetworkHelper {
 
     public static boolean hasNetworkAccess(Context context) {
 

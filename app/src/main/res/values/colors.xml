@@ -9,4 +9,5 @@
     <color name="secondary_text">#757575</color>
 
     <color name="recipe_dark_transluscent">#85042d45</color>
+    <color name="widget_text">#081ab7</color>
 </resources>

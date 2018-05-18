@@ -22,16 +22,13 @@
         </activity>
         <activity
             android:name=".activity.RecipeDetailsActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:label="@string/title_activity_recipe_details"
             android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.RecipesListActivity" />
         </activity>
-        <activity
-            android:name=".activity.StepDetailsActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode">
+        <activity android:name=".activity.StepDetailsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.RecipeDetailsActivity" />

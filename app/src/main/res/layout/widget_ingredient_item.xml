@@ -12,9 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
-        android:paddingStart="8dp"
         android:paddingEnd="4dp"
-        android:textColor="@color/colorAccent"
+        android:paddingStart="8dp"
         android:textSize="14sp"
         tools:text="1" />
 
@@ -24,7 +23,6 @@
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:paddingEnd="8dp"
-        android:textColor="@android:color/background_dark"
         android:textSize="14sp"
         android:textStyle="italic"
         tools:text="K" />
@@ -34,6 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
+        android:textColor="@color/widget_text"
         android:textSize="18sp"
         tools:text="Nutella or other chocolate-hazelnut spread" />
 

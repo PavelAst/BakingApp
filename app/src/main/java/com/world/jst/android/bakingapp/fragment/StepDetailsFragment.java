@@ -1,14 +1,11 @@
 package com.world.jst.android.bakingapp.fragment;
 
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.Guideline;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -109,7 +106,6 @@ public class StepDetailsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        if (L) Log.d(TAG, "*** StepDetailsFragment - onCreateView ***");
         int fragment_step_details = (mTwoPane) ?
                 R.layout.fragment_step_details_tablet :
                 R.layout.fragment_step_details;
@@ -117,21 +113,13 @@ public class StepDetailsFragment extends Fragment {
         mUnbinder = ButterKnife.bind(this, view);
 
         if (savedInstanceState != null) {
+            if (L) Log.d(TAG, "*** onCreateView - savedInstanceState != null ***");
             mPlaybackPosition = savedInstanceState.getLong(PLAYBACK_POSITION);
             mCurrentWindow = savedInstanceState.getInt(CURRENT_WINDOW);
             mPlayWhenReady = savedInstanceState.getBoolean(PLAY_WHEN_READY);
         }
 
         mComponentListener = new ComponentListener();
-
-        playerView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (!hasFocus) {
-                    mPlayer.stop();
-                }
-            }
-        });
 
         mShortDescriptionTextView.setText(mShortDescription);
         mDescriptionTextView.setText(mDescription);
@@ -141,7 +129,7 @@ public class StepDetailsFragment extends Fragment {
 
     @Override
     public void onStart() {
-        if (L) Log.d(TAG, "*** StepDetailsFragment - onStart ***");
+        if (L) Log.d(TAG, "***  - onStart ***");
         super.onStart();
         if (Util.SDK_INT > 23) {
             initializePlayer();
@@ -177,7 +165,7 @@ public class StepDetailsFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        if (L) Log.d(TAG, "*** StepDetailsFragment - onDestroyView ***");
+        if (L) Log.d(TAG, "*** StepDetailsFragment-onDestroyView ***");
         super.onDestroyView();
         mUnbinder.unbind();
     }
@@ -189,7 +177,7 @@ public class StepDetailsFragment extends Fragment {
             return;
         }
         if (mPlayer == null) {
-            if (L) Log.d(TAG, "*** StepDetailsFragment - initializePlayer ***");
+            if (L) Log.d(TAG, "*** StepDetailsFragment-initializePlayer ***");
             mPlayer = ExoPlayerFactory.newSimpleInstance(new DefaultRenderersFactory(getActivity()),
                     new DefaultTrackSelector(), new DefaultLoadControl());
             mPlayer.addListener(mComponentListener);
@@ -200,7 +188,7 @@ public class StepDetailsFragment extends Fragment {
             mPlayer.seekTo(mCurrentWindow, mPlaybackPosition);
         }
         MediaSource mediaSource = buildMediaSource(Uri.parse(mVideoUrl));
-        mPlayer.prepare(mediaSource, true, false);
+        mPlayer.prepare(mediaSource, false, false);
     }
 
     private void showThumbnailImageView() {
@@ -224,7 +212,7 @@ public class StepDetailsFragment extends Fragment {
 
     private void releasePlayer() {
         if (mPlayer != null) {
-            if (L) Log.d(TAG, "*** StepDetailsFragment - releasePlayer ***");
+            if (L) Log.d(TAG, "*** StepDetailsFragment-releasePlayer ***");
             mPlaybackPosition = mPlayer.getCurrentPosition();
             mCurrentWindow = mPlayer.getCurrentWindowIndex();
             mPlayWhenReady = mPlayer.getPlayWhenReady();
@@ -255,47 +243,26 @@ public class StepDetailsFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putLong(PLAYBACK_POSITION, mPlaybackPosition);
-        outState.putInt(CURRENT_WINDOW, mCurrentWindow);
-        outState.putBoolean(PLAY_WHEN_READY, mPlayWhenReady);
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (!isVisibleToUser && mPlayer != null) {
+            mPlayWhenReady = false;
+            mPlayer.setPlayWhenReady(mPlayWhenReady);
+        }
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        int currentOrientation = newConfig.orientation;
-        if (!mTwoPane && currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-            View decorView = getActivity().getWindow().getDecorView();
-            // Hide the status bar.
-            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-            decorView.setSystemUiVisibility(uiOptions);
-
-            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-            if (actionBar != null) {
-                actionBar.hide();
-            }
-
-            mGuideline.setGuidelinePercent((float) 1.0);
-            mShortDescriptionTextView.setVisibility(View.INVISIBLE);
-            mDescriptionTextView.setVisibility(View.INVISIBLE);
-        } else {
-            View decorView = getActivity().getWindow().getDecorView();
-            // show the status bar.
-            int uiOptions = View.SYSTEM_UI_FLAG_VISIBLE;
-            decorView.setSystemUiVisibility(uiOptions);
-
-            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-            if (actionBar != null) {
-                actionBar.show();
-            }
-
-            mGuideline.setGuidelinePercent((float) 0.6);
-            mShortDescriptionTextView.setVisibility(View.VISIBLE);
-            mDescriptionTextView.setVisibility(View.VISIBLE);
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (L) Log.d(TAG, "**** StepDetailsFragment-onSaveInstanceState ***");
+        if (mPlayer != null) {
+            mPlaybackPosition = mPlayer.getCurrentPosition();
+            mCurrentWindow = mPlayer.getCurrentWindowIndex();
+            mPlayWhenReady = mPlayer.getPlayWhenReady();
         }
+        outState.putLong(PLAYBACK_POSITION, mPlaybackPosition);
+        outState.putInt(CURRENT_WINDOW, mCurrentWindow);
+        outState.putBoolean(PLAY_WHEN_READY, mPlayWhenReady);
     }
 
 }
