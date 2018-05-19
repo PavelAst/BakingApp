@@ -75,7 +75,8 @@ public class RecipeDetailsActivity extends AppCompatActivity
                     .commit();
         }
 
-        if (findViewById(R.id.steps_linear_layout) != null) {
+        boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
+        if (tabletSize) {
             mTwoPane = true;
             if (L) Log.d(TAG, "mTwoPane = true");
             /*
