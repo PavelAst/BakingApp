@@ -11,11 +11,11 @@
         android:id="@+id/widget_recipe_name_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
+        android:layout_margin="@dimen/margin_small"
         android:text="@string/appwidget_text"
         android:textAlignment="center"
         android:textColor="@color/primary_text"
-        android:textSize="18sp"
+        android:textSize="@dimen/text_medium_plus"
         android:textStyle="bold|italic" />
 
     <TextView
@@ -23,10 +23,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:paddingEnd="8dp"
-        android:paddingStart="8dp"
+        android:paddingEnd="@dimen/row_padding"
+        android:paddingStart="@dimen/row_padding"
         android:textColor="@color/widget_text"
-        android:textSize="14sp"
+        android:textSize="@dimen/text_widget"
         tools:text="Nutella or other chocolate-hazelnut spread" />
 
 </LinearLayout>

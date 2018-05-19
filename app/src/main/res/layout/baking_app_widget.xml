@@ -10,11 +10,11 @@
         android:id="@+id/widget_recipe_name_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
+        android:layout_margin="@dimen/margin_small"
         android:text="@string/appwidget_text"
         android:textAlignment="center"
         android:textColor="@color/primary_text"
-        android:textSize="18sp"
+        android:textSize="@dimen/text_medium_plus"
         android:textStyle="bold|italic" />
 
     <ListView
