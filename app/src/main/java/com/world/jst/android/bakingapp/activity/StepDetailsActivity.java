@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
@@ -67,7 +68,7 @@ public class StepDetailsActivity extends AppCompatActivity {
             ActionBar actionBar = getSupportActionBar();
             if (actionBar != null) {
                 actionBar.setDisplayHomeAsUpEnabled(true);
-                if (recipeName != null && !recipeName.isEmpty()) {
+                if (!TextUtils.isEmpty(recipeName)) {
                     actionBar.setTitle(recipeName);
                 }
             }

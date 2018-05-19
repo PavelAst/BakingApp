@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.world.jst.android.bakingapp.R;
@@ -52,7 +53,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
         Intent initialIntent = getIntent();
         mRecipeId = initialIntent.getIntExtra(RECIPE_ITEM_ID, 1);
         mRecipeName = initialIntent.getStringExtra(RECIPE_ITEM_NAME);
-        if (mRecipeName != null && !mRecipeName.isEmpty()) {
+        if (!TextUtils.isEmpty(mRecipeName)) {
             getSupportActionBar().setTitle(mRecipeName);
         }
 

@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.Guideline;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -171,7 +172,7 @@ public class StepDetailsFragment extends Fragment {
     }
 
     private void initializePlayer() {
-        if ((mVideoUrl == null) || mVideoUrl.isEmpty()) {
+        if (TextUtils.isEmpty(mVideoUrl)) {
             showThumbnailImageView();
             displayThumbnailImage();
             return;
@@ -197,7 +198,7 @@ public class StepDetailsFragment extends Fragment {
     }
 
     private void displayThumbnailImage() {
-        if (mThumbnailUrl != null && !mThumbnailUrl.isEmpty()) {
+        if (!TextUtils.isEmpty(mThumbnailUrl)) {
             Picasso.get()
                     .load(mThumbnailUrl)
                     .placeholder(R.drawable.bakery_new)
