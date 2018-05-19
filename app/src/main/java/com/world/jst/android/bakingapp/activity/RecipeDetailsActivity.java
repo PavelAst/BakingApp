@@ -2,7 +2,7 @@ package com.world.jst.android.bakingapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -18,7 +18,6 @@ import com.world.jst.android.bakingapp.fragment.RecipeStepsFragment;
 import com.world.jst.android.bakingapp.fragment.StepDetailsFragment;
 import com.world.jst.android.bakingapp.model.Recipe;
 import com.world.jst.android.bakingapp.model.Step;
-import com.world.jst.android.bakingapp.view.SlidingTabLayout;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -35,9 +34,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
     private String mRecipeName;
     private int mRecipeId;
     private Realm mRealm;
-    /**
-     * A {@link ViewPager} which will be used in conjunction with the {@link SlidingTabLayout} above.
-     */
+
     private ViewPager mRecipeStepViewPager;
 
     @Override
@@ -79,20 +76,14 @@ public class RecipeDetailsActivity extends AppCompatActivity
         if (tabletSize) {
             mTwoPane = true;
             if (L) Log.d(TAG, "mTwoPane = true");
-            /*
-      A custom {@link ViewPager} title strip which looks much like Tabs present in Android v4.0 and
-      above, but is designed to give continuous feedback to the user when scrolling.
-     */
-            SlidingTabLayout slidingTabLayout = findViewById(R.id.steps_sliding_tabs);
-            mRecipeStepViewPager = findViewById(R.id.recipe_steps_vp);
 
             mRealm = Realm.getDefaultInstance();
-
             Recipe recipe = mRealm.where(Recipe.class)
                     .equalTo("mId", mRecipeId)
                     .findFirst();
             final RealmList<Step> steps = recipe.mSteps;
 
+            mRecipeStepViewPager = findViewById(R.id.recipe_steps_vp);
             mRecipeStepViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
                 @Override
                 public Fragment getItem(int position) {
@@ -110,13 +101,15 @@ public class RecipeDetailsActivity extends AppCompatActivity
                     return steps.size();
                 }
 
-                @Nullable
+                // This determines the title for each tab
                 @Override
                 public CharSequence getPageTitle(int position) {
-                    return "Step " + (position + 1);
+                    return String.format(getString(R.string.step_number), (position + 1));
                 }
             });
-            slidingTabLayout.setViewPager(mRecipeStepViewPager);
+
+            TabLayout slidingTabLayout = findViewById(R.id.steps_sliding_tabs);
+            slidingTabLayout.setupWithViewPager(mRecipeStepViewPager);
 
         } else {
             // We're in single-pane mode and displaying fragments on a phone in separate activities

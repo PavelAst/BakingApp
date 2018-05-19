@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -19,7 +19,6 @@ import com.world.jst.android.bakingapp.R;
 import com.world.jst.android.bakingapp.fragment.StepDetailsFragment;
 import com.world.jst.android.bakingapp.model.Recipe;
 import com.world.jst.android.bakingapp.model.Step;
-import com.world.jst.android.bakingapp.view.SlidingTabLayout;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -76,22 +75,15 @@ public class StepDetailsActivity extends AppCompatActivity {
 
         if (L) Log.d(TAG, "mRecipeId = " + recipeId);
 
-        /*
-          A custom {@link ViewPager} title strip which looks much like Tabs present in Android v4.0 and
-          above, but is designed to give continuous feedback to the user when scrolling.
-        */
-        SlidingTabLayout slidingTabLayout = findViewById(R.id.steps_sliding_tabs);
-        /*
-          A {@link ViewPager} which will be used in conjunction with the {@link SlidingTabLayout} above.
-         */
-        ViewPager recipeStepViewPager = findViewById(R.id.recipe_steps_vp);
-
         mRealm = Realm.getDefaultInstance();
-
         Recipe recipe = mRealm.where(Recipe.class)
                 .equalTo("mId", recipeId)
                 .findFirst();
         final RealmList<Step> steps = recipe.mSteps;
+        /*
+          A {@link ViewPager} which will be used in conjunction with the TabLayout.
+         */
+        ViewPager recipeStepViewPager = findViewById(R.id.recipe_steps_vp);
 
         FragmentManager fm = getSupportFragmentManager();
         recipeStepViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
@@ -111,13 +103,15 @@ public class StepDetailsActivity extends AppCompatActivity {
                 return steps.size();
             }
 
-            @Nullable
+            // This determines the title for each tab
             @Override
             public CharSequence getPageTitle(int position) {
-                return "Step " + (position + 1);
+                return String.format(getString(R.string.step_number), (position + 1));
             }
         });
-        slidingTabLayout.setViewPager(recipeStepViewPager);
+
+        TabLayout slidingTabLayout = findViewById(R.id.steps_sliding_tabs);
+        slidingTabLayout.setupWithViewPager(recipeStepViewPager);
 
         for (int i = 0; i < steps.size(); i++) {
             if (steps.get(i).mId == stepId) {
